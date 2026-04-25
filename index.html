@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khushi Karpe — AI Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+:root {
+  --bg: #0C0F0A;
+  --surface: #141810;
+  --surface2: #1A1F16;
+  --green: #4A7C59;
+  --green-light: #6DB88A;
+  --amber: #C8893A;
+  --cream: #E8E0CC;
+  --muted: #6B6B5A;
+  --border: rgba(232,224,204,0.08);
+  --border-green: rgba(74,124,89,0.3);
+}
+body {
+  background: var(--bg);
+  color: var(--cream);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+.cursor {
+  width: 8px; height: 8px;
+  background: var(--green-light);
+  border-radius: 50%;
+  position: fixed; pointer-events: none; z-index: 9999;
+  transition: transform 0.15s ease, width 0.2s, height 0.2s;
+  transform: translate(-50%, -50%);
+}
+.cursor-ring {
+  width: 32px; height: 32px;
+  border: 1px solid rgba(109,184,138,0.4);
+  border-radius: 50%;
+  position: fixed; pointer-events: none; z-index: 9998;
+  transition: width 0.2s, height 0.2s, border-color 0.2s;
+  transform: translate(-50%, -50%);
+}
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.5rem 5rem;
+}
+nav::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(12,15,10,0.92) 0%, transparent 100%);
+  pointer-events: none; z-index: -1;
+}
+.nav-logo {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem; letter-spacing: 0.2em;
+  color: var(--green-light); text-decoration: none; text-transform: uppercase;
+}
+.nav-right { display: flex; align-items: center; gap: 3rem; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--cream); }
+.nav-status {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.1em; color: var(--green-light);
+}
+.nav-status::before {
+  content: ''; width: 6px; height: 6px;
+  background: var(--green-light); border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 5rem 5rem;
+  position: relative; overflow: hidden;
+}
+.field-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.hero-bg-text {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(10rem, 22vw, 22rem);
+  font-weight: 300; letter-spacing: -0.04em;
+  color: rgba(74,124,89,0.04);
+  white-space: nowrap; pointer-events: none; user-select: none; line-height: 1;
+}
+.hero-meta {
+  display: flex; align-items: center; gap: 1.5rem;
+  margin-bottom: 2rem; position: relative; z-index: 1;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+.hero-meta-line { width: 3rem; height: 1px; background: var(--green); }
+.hero-meta-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--green-light);
+}
+.hero-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(4rem, 9vw, 9rem); font-weight: 300;
+  line-height: 0.92; letter-spacing: -0.02em;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.8s 0.35s ease both;
+}
+.hero-name .italic { font-style: italic; color: var(--green-light); }
+.hero-name .outline { -webkit-text-stroke: 1px rgba(232,224,204,0.3); color: transparent; }
+.hero-bottom {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-top: 3rem; position: relative; z-index: 1;
+  animation: fadeUp 0.8s 0.5s ease both;
+}
+.hero-desc { max-width: 420px; font-size: 0.95rem; line-height: 1.75; color: rgba(232,224,204,0.55); }
+.hero-scroll {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
+}
+.hero-scroll-line {
+  width: 1px; height: 4rem;
+  background: linear-gradient(to bottom, var(--green), transparent);
+  animation: scrollLine 2s ease infinite;
+}
+@keyframes scrollLine {
+  0%{transform:scaleY(0);transform-origin:top}
+  50%{transform:scaleY(1);transform-origin:top}
+  51%{transform:scaleY(1);transform-origin:bottom}
+  100%{transform:scaleY(0);transform-origin:bottom}
+}
+
+/* TICKER */
+.ticker-wrap {
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  background: var(--surface); overflow: hidden; padding: 0.9rem 0; white-space: nowrap;
+}
+.ticker-inner { display: inline-flex; gap: 3rem; animation: ticker 28s linear infinite; }
+.ticker-inner:hover { animation-play-state: paused; }
+.ticker-item {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
+  display: inline-flex; align-items: center; gap: 0.75rem;
+}
+.ticker-item .dot { color: var(--green-light); font-size: 0.5rem; }
+@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ABOUT */
+.about {
+  padding: 8rem 5rem;
+  display: grid; grid-template-columns: 1fr 2fr; gap: 6rem; align-items: start;
+  border-bottom: 1px solid var(--border);
+}
+.about-label { position: sticky; top: 8rem; }
+.section-number {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.2em; color: var(--green); margin-bottom: 0.5rem;
+}
+.section-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.8rem; font-weight: 300; line-height: 1.1; letter-spacing: -0.01em;
+}
+.section-heading em { font-style: italic; color: var(--green-light); }
+.about-content { display: flex; flex-direction: column; gap: 3rem; }
+.about-bio p { font-size: 1.05rem; line-height: 1.9; color: rgba(232,224,204,0.65); margin-bottom: 1.2rem; }
+.about-bio p span { color: var(--cream); font-weight: 400; }
+.skills-columns {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+  border-top: 1px solid var(--border); padding-top: 2.5rem;
+}
+.skill-col-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--green); margin-bottom: 1rem;
+}
+.skill-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.skill-list li {
+  font-size: 0.85rem; color: rgba(232,224,204,0.55);
+  display: flex; align-items: center; gap: 0.6rem; transition: color 0.2s;
+}
+.skill-list li:hover { color: var(--cream); }
+.skill-list li::before {
+  content: ''; width: 4px; height: 4px;
+  background: var(--green); border-radius: 50%; flex-shrink: 0;
+}
+
+/* PROJECT */
+.project-section { padding: 8rem 5rem; }
+.project-header {
+  display: grid; grid-template-columns: auto 1fr; align-items: end; gap: 2rem; margin-bottom: 5rem;
+}
+.project-header-line { height: 1px; background: linear-gradient(to right, var(--border-green), transparent); }
+.project-hero-card {
+  position: relative; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 2px; overflow: hidden;
+}
+.project-banner {
+  background: var(--green); padding: 3rem 4rem;
+  display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: start;
+  position: relative; overflow: hidden;
+}
+.project-banner::before {
+  content: 'FARMROVER';
+  position: absolute; bottom: -1.5rem; right: -1rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 7.5rem; font-weight: 300;
+  color: rgba(0,0,0,0.12); pointer-events: none;
+  letter-spacing: -0.04em; line-height: 1;
+}
+.project-flag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+  background: rgba(0,0,0,0.2); color: rgba(232,224,204,0.8);
+  padding: 0.3rem 0.8rem; border-radius: 1px; display: inline-block; margin-bottom: 1.2rem;
+}
+.project-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 300;
+  line-height: 0.95; color: var(--cream); letter-spacing: -0.02em; margin-bottom: 0.75rem;
+}
+.project-sub { font-size: 1rem; color: rgba(232,224,204,0.7); line-height: 1.5; }
+.project-stack { display: flex; flex-direction: column; gap: 0.4rem; align-items: flex-end; }
+.stack-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.1em;
+  color: rgba(232,224,204,0.6); background: rgba(0,0,0,0.15);
+  padding: 0.25rem 0.6rem; border-radius: 1px;
+}
+.project-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.project-col { padding: 3rem 4rem; border-right: 1px solid var(--border); }
+.project-col:last-child { border-right: none; }
+.col-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--green-light); margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);
+}
+.project-col p { font-size: 0.9rem; line-height: 1.85; color: rgba(232,224,204,0.55); margin-bottom: 1.2rem; }
+.project-col p strong { color: var(--cream); font-weight: 400; }
+.flow-steps { display: flex; flex-direction: column; }
+.flow-step {
+  display: flex; align-items: flex-start; gap: 1.25rem;
+  padding: 1rem 0; border-bottom: 1px solid var(--border);
+}
+.flow-step:last-child { border-bottom: none; }
+.flow-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.1em; color: var(--green);
+  margin-top: 0.2rem; flex-shrink: 0; width: 1.5rem;
+}
+.flow-text { font-size: 0.85rem; color: rgba(232,224,204,0.6); line-height: 1.5; }
+.flow-text strong { color: var(--cream); font-weight: 400; }
+.features-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--border);
+}
+.feature-cell {
+  background: var(--surface); padding: 1.5rem 2rem; transition: background 0.2s;
+}
+.feature-cell:hover { background: var(--surface2); }
+.feat-icon {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.12em; color: var(--green); margin-bottom: 0.6rem;
+}
+.feat-name { font-size: 0.9rem; font-weight: 400; color: var(--cream); margin-bottom: 0.3rem; }
+.feat-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.55; }
+.sdg-row {
+  padding: 2rem 4rem; border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
+}
+.sdg-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); flex-shrink: 0;
+}
+.sdg-badges { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.sdg-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.06em;
+  padding: 0.4rem 1rem; border: 1px solid; border-radius: 1px;
+}
+.sdg-green { border-color: var(--green); color: var(--green-light); }
+.sdg-blue { border-color: rgba(60,130,180,0.4); color: rgba(100,180,220,0.8); }
+.sdg-amber { border-color: rgba(200,137,58,0.4); color: var(--amber); }
+.team-row {
+  padding: 2rem 4rem; border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 3rem; background: var(--surface2); flex-wrap: wrap;
+}
+.team-label-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); flex-shrink: 0;
+}
+.team-members { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+.team-divider-v { width: 1px; height: 2.5rem; background: var(--border); }
+.member {
+  display: flex; align-items: center; gap: 0.85rem;
+  text-decoration: none; color: inherit; transition: opacity 0.2s;
+}
+.member:hover { opacity: 0.7; }
+.member-av {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; font-weight: 500; flex-shrink: 0;
+}
+.av-lead { background: rgba(74,124,89,0.25); color: var(--green-light); border: 1px solid var(--border-green); }
+.av-partner { background: rgba(232,224,204,0.06); color: rgba(232,224,204,0.5); border: 1px solid var(--border); }
+.member-name-text { font-size: 0.88rem; font-weight: 400; color: var(--cream); line-height: 1; margin-bottom: 0.25rem; }
+.member-role-text { font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; color: var(--muted); }
+.lead-chip {
+  display: inline-block; font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.5rem; letter-spacing: 0.14em; text-transform: uppercase;
+  background: var(--green); color: rgba(232,224,204,0.9);
+  padding: 0.15rem 0.5rem; border-radius: 1px; margin-top: 0.25rem;
+}
+
+/* BOTTOM GRID */
+.bottom-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--border); }
+.bottom-cell { padding: 5rem; border-right: 1px solid var(--border); }
+.bottom-cell:last-child { border-right: none; }
+.edu-year { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.18em; color: var(--green); margin-bottom: 1rem; }
+.edu-degree-text { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; line-height: 1.2; margin-bottom: 0.5rem; }
+.edu-school-text { font-size: 0.9rem; color: rgba(232,224,204,0.5); margin-bottom: 0.25rem; }
+.edu-loc { font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; color: var(--muted); }
+.cert-block { margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 2rem; }
+.cert-item { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+.cert-item:last-child { border-bottom: none; }
+.cert-dot-g { width: 6px; height: 6px; background: var(--green); border-radius: 50%; margin-top: 0.35rem; flex-shrink: 0; }
+.cert-title { font-size: 0.88rem; color: var(--cream); margin-bottom: 0.2rem; }
+.cert-by { font-size: 0.75rem; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
+.contact-links { display: flex; flex-direction: column; gap: 0; }
+.contact-item {
+  display: flex; align-items: center; gap: 1.5rem;
+  padding: 1.5rem 0; border-bottom: 1px solid var(--border);
+  text-decoration: none; color: inherit; transition: padding-left 0.2s;
+}
+.contact-item:first-child { border-top: 1px solid var(--border); }
+.contact-item:hover { padding-left: 0.75rem; }
+.contact-item:hover .ci-label { color: var(--green-light); }
+.ci-type { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); width: 4rem; flex-shrink: 0; }
+.ci-label { font-size: 0.9rem; color: rgba(232,224,204,0.7); transition: color 0.2s; }
+.ci-arrow { margin-left: auto; color: var(--muted); font-size: 0.8rem; transition: transform 0.2s, color 0.2s; }
+.contact-item:hover .ci-arrow { transform: translateX(4px); color: var(--green-light); }
+
+footer {
+  border-top: 1px solid var(--border); padding: 2rem 5rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-copy { font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--muted); }
+.footer-loc { font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; letter-spacing: 0.1em; color: var(--muted); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:none} }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.75s ease, transform 0.75s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+
+@media (max-width: 900px) {
+  nav { padding: 1.2rem 2rem; }
+  .nav-links, .nav-status { display: none; }
+  .hero { padding: 0 2rem 3.5rem; }
+  .hero-bg-text { display: none; }
+  .about { padding: 5rem 2rem; grid-template-columns: 1fr; gap: 3rem; }
+  .about-label { position: static; }
+  .skills-columns { grid-template-columns: 1fr 1fr; }
+  .project-section { padding: 5rem 2rem; }
+  .project-banner { padding: 2rem; grid-template-columns: 1fr; }
+  .project-body { grid-template-columns: 1fr; }
+  .project-col { padding: 2rem; border-right: none; border-bottom: 1px solid var(--border); }
+  .project-col:last-child { border-bottom: none; }
+  .sdg-row, .team-row { padding: 2rem; }
+  .features-grid { grid-template-columns: 1fr; }
+  .bottom-grid { grid-template-columns: 1fr; }
+  .bottom-cell { padding: 3rem 2rem; border-right: none; border-bottom: 1px solid var(--border); }
+  footer { padding: 1.5rem 2rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+  body { cursor: auto; }
+  .cursor, .cursor-ring { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="#" class="nav-logo">KK — Portfolio</a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#project">Project</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-status">Available for internships</div>
+  </div>
+</nav>
+
+<section class="hero" id="home">
+  <canvas class="field-canvas" id="fieldCanvas"></canvas>
+  <div class="hero-bg-text">KHUSHI</div>
+  <div class="hero-meta">
+    <div class="hero-meta-line"></div>
+    <div class="hero-meta-text">Computer Science · AI / ML · Computer Vision</div>
+  </div>
+  <h1 class="hero-name">
+    <span class="outline">Khushi</span><br>
+    <span class="italic">Karpe</span>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-desc">First-year CSE student at Sanjivani University building AI systems at the intersection of computer vision, deep learning, and real-world robotics. Project lead, FarmRover.</p>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </div>
+</section>
+
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="tickerInner">
+    <span class="ticker-item"><span class="dot">◆</span> Python</span>
+    <span class="ticker-item"><span class="dot">◆</span> TensorFlow</span>
+    <span class="ticker-item"><span class="dot">◆</span> OpenCV</span>
+    <span class="ticker-item"><span class="dot">◆</span> MediaPipe</span>
+    <span class="ticker-item"><span class="dot">◆</span> Deep Learning</span>
+    <span class="ticker-item"><span class="dot">◆</span> Computer Vision</span>
+    <span class="ticker-item"><span class="dot">◆</span> Keras</span>
+    <span class="ticker-item"><span class="dot">◆</span> PyTorch</span>
+    <span class="ticker-item"><span class="dot">◆</span> Raspberry Pi</span>
+    <span class="ticker-item"><span class="dot">◆</span> IoT</span>
+    <span class="ticker-item"><span class="dot">◆</span> Flask</span>
+    <span class="ticker-item"><span class="dot">◆</span> MySQL</span>
+    <span class="ticker-item"><span class="dot">◆</span> LangChain</span>
+    <span class="ticker-item"><span class="dot">◆</span> Tableau</span>
+    <span class="ticker-item"><span class="dot">◆</span> Python</span>
+    <span class="ticker-item"><span class="dot">◆</span> TensorFlow</span>
+    <span class="ticker-item"><span class="dot">◆</span> OpenCV</span>
+    <span class="ticker-item"><span class="dot">◆</span> MediaPipe</span>
+    <span class="ticker-item"><span class="dot">◆</span> Deep Learning</span>
+    <span class="ticker-item"><span class="dot">◆</span> Computer Vision</span>
+    <span class="ticker-item"><span class="dot">◆</span> Keras</span>
+    <span class="ticker-item"><span class="dot">◆</span> PyTorch</span>
+    <span class="ticker-item"><span class="dot">◆</span> Raspberry Pi</span>
+    <span class="ticker-item"><span class="dot">◆</span> IoT</span>
+    <span class="ticker-item"><span class="dot">◆</span> Flask</span>
+    <span class="ticker-item"><span class="dot">◆</span> MySQL</span>
+    <span class="ticker-item"><span class="dot">◆</span> LangChain</span>
+    <span class="ticker-item"><span class="dot">◆</span> Tableau</span>
+  </div>
+</div>
+
+<section class="about" id="about">
+  <div class="about-label reveal">
+    <div class="section-number">01 / About</div>
+    <h2 class="section-heading">Who<br>I <em>am.</em></h2>
+  </div>
+  <div class="about-content">
+    <div class="about-bio reveal reveal-delay-1">
+      <p>I'm <span>Khushi Karpe</span>, a first-year B.Tech Computer Science student from Kopargaon, Maharashtra. My work sits at the intersection of <span>AI, computer vision, and real-world engineering</span> — building systems that don't just run in notebooks but actually solve tangible problems.</p>
+      <p>As <span>project lead of FarmRover</span>, I coordinated a cross-disciplinary team to ship an autonomous agricultural robot integrating IoT sensors, a trained disease-detection model, and a live GPS dashboard. I'm driven by the conviction that <span>AI-driven solutions should reach the people who need them most.</span></p>
+      <p>I'm actively seeking internship opportunities to deepen my expertise in machine learning, embedded AI, and production systems.</p>
+    </div>
+    <div class="skills-columns reveal reveal-delay-2">
+      <div>
+        <div class="skill-col-title">Languages</div>
+        <ul class="skill-list">
+          <li>Python</li><li>C &amp; C++</li><li>SQL</li><li>HTML / CSS</li>
+        </ul>
+      </div>
+      <div>
+        <div class="skill-col-title">AI / ML</div>
+        <ul class="skill-list">
+          <li>TensorFlow</li><li>Keras</li><li>PyTorch</li><li>OpenCV</li><li>MediaPipe</li><li>LangChain</li>
+        </ul>
+      </div>
+      <div>
+        <div class="skill-col-title">Data &amp; Tools</div>
+        <ul class="skill-list">
+          <li>Pandas / NumPy</li><li>Matplotlib</li><li>Tableau</li><li>MySQL / MongoDB</li><li>Flask</li><li>Jupyter / VS Code</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="project-section" id="project">
+  <div class="project-header">
+    <div>
+      <div class="section-number">02 / Project</div>
+      <h2 class="section-heading" style="font-size:2.2rem;">Featured <em>Work.</em></h2>
+    </div>
+    <div class="project-header-line"></div>
+  </div>
+
+  <div class="project-hero-card reveal">
+    <div class="project-banner">
+      <div>
+        <div class="project-flag">Team Lead · AI + Robotics · IoT</div>
+        <div class="project-title">FarmRover</div>
+        <div class="project-sub">AI-Powered Precision Agriculture Robot —<br>autonomous field monitoring, smart irrigation &amp; crop disease detection</div>
+      </div>
+      <div class="project-stack">
+        <span class="stack-tag">Python</span>
+        <span class="stack-tag">TensorFlow</span>
+        <span class="stack-tag">Raspberry Pi 4</span>
+        <span class="stack-tag">OpenCV</span>
+        <span class="stack-tag">IoT Sensors</span>
+        <span class="stack-tag">GPS Module</span>
+        <span class="stack-tag">SQLite</span>
+        <span class="stack-tag">Hardware Control</span>
+      </div>
+    </div>
+
+    <div class="project-body">
+      <div class="project-col">
+        <div class="col-label">Problem &amp; Solution</div>
+        <p>Small farmers in India face a compounding crisis: <strong>manual irrigation wastes water</strong>, crop diseases are detected too late to save yield, and there's zero access to real-time field intelligence.</p>
+        <p>FarmRover is an autonomous robot that <strong>thinks before it waters</strong>. On-board sensors read soil moisture, temperature, and humidity. A camera feeds a trained disease-detection model. GPS logs location-stamped readings to generate moisture heatmaps. All of it streams live to a dashboard — <strong>complete farm intelligence in one system.</strong></p>
+        <p>It is not just a robot. It is a smart farming assistant.</p>
+      </div>
+      <div class="project-col">
+        <div class="col-label">Operational Flow</div>
+        <div class="flow-steps">
+          <div class="flow-step"><span class="flow-num">01</span><span class="flow-text"><strong>Rover navigates</strong> the field autonomously with obstacle detection</span></div>
+          <div class="flow-step"><span class="flow-num">02</span><span class="flow-text"><strong>Sensors collect</strong> soil moisture, temperature, humidity &amp; GPS location</span></div>
+          <div class="flow-step"><span class="flow-num">03</span><span class="flow-text"><strong>Camera captures</strong> plant images and feeds the AI disease model</span></div>
+          <div class="flow-step"><span class="flow-num">04</span><span class="flow-text"><strong>Raspberry Pi processes</strong> — detects disease, decides irrigation trigger</span></div>
+          <div class="flow-step"><span class="flow-num">05</span><span class="flow-text"><strong>Pump activates</strong> only when soil is dry → relay on → water sprayed</span></div>
+          <div class="flow-step"><span class="flow-num">06</span><span class="flow-text"><strong>Dashboard updates</strong> with live data, GPS heatmap &amp; alerts</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-cell">
+        <div class="feat-icon">// 01 — IRRIGATION</div>
+        <div class="feat-name">Smart Irrigation</div>
+        <div class="feat-desc">Waters only when sensors confirm soil dryness. Saves ~40% water vs. traditional manual methods.</div>
+      </div>
+      <div class="feature-cell">
+        <div class="feat-icon">// 02 — AI</div>
+        <div class="feat-name">Disease Detection</div>
+        <div class="feat-desc">Trained vision model identifies leaf diseases early. Flags anomalies and suggests treatment in real-time.</div>
+      </div>
+      <div class="feature-cell">
+        <div class="feat-icon">// 03 — GPS</div>
+        <div class="feat-name">Field Heatmapping</div>
+        <div class="feat-desc">GPS-tagged sensor readings generate moisture heatmaps — dry vs. wet zone visualization across the entire field.</div>
+      </div>
+      <div class="feature-cell">
+        <div class="feat-icon">// 04 — DASHBOARD</div>
+        <div class="feat-name">Live Monitoring</div>
+        <div class="feat-desc">Real-time camera feed, sensor stream, GPS map, and automated alerts accessible from any device.</div>
+      </div>
+      <div class="feature-cell">
+        <div class="feat-icon">// 05 — HARDWARE</div>
+        <div class="feat-name">Autonomous Navigation</div>
+        <div class="feat-desc">Ultrasonic obstacle detection with intelligent field routing algorithms built on Raspberry Pi 4.</div>
+      </div>
+      <div class="feature-cell">
+        <div class="feat-icon">// 06 — SCALE</div>
+        <div class="feat-name">Scalable &amp; Low-Cost</div>
+        <div class="feat-desc">Off-the-shelf components, solar-ready design. Built for small farms, scalable to large ones. Future: mobile app + drone support.</div>
+      </div>
+    </div>
+
+    <div class="sdg-row">
+      <span class="sdg-label">SDG Alignment</span>
+      <div class="sdg-badges">
+        <span class="sdg-badge sdg-green">SDG 2 — Zero Hunger</span>
+        <span class="sdg-badge sdg-blue">SDG 6 — Clean Water &amp; Sanitation</span>
+        <span class="sdg-badge sdg-amber">SDG 13 — Climate Action</span>
+      </div>
+    </div>
+
+    <div class="team-row">
+      <span class="team-label-text">Team</span>
+      <div class="team-members">
+        <a href="https://www.linkedin.com/in/khushi-karpe-174b77377" target="_blank" class="member">
+          <div class="member-av av-lead">KK</div>
+          <div>
+            <div class="member-name-text">Khushi Karpe</div>
+            <div class="member-role-text">CSE · 1st Year</div>
+            <div class="lead-chip">Project Lead</div>
+          </div>
+        </a>
+        <div class="team-divider-v"></div>
+        <a href="https://www.linkedin.com/in/sarthak-labhade" target="_blank" class="member">
+          <div class="member-av av-partner">SL</div>
+          <div>
+            <div class="member-name-text">Sarthak Labhade</div>
+            <div class="member-role-text">AI / ML Engineer</div>
+          </div>
+        </a>
+        <div class="team-divider-v"></div>
+        <a href="https://www.linkedin.com/in/swamini-mate-337192376" target="_blank" class="member">
+          <div class="member-av av-partner">SM</div>
+          <div>
+            <div class="member-name-text">Swamini Mate</div>
+            <div class="member-role-text">BCA · 2nd Year</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="bottom-grid" id="contact">
+  <div class="bottom-cell reveal">
+    <div class="section-number">03 / Education</div>
+    <div class="edu-year" style="margin-top:1rem;">2024 — Present</div>
+    <div class="edu-degree-text">B.Tech — Computer Science &amp; Engineering</div>
+    <div class="edu-school-text">Sanjivani University</div>
+    <div class="edu-loc">Kopargaon, Maharashtra, India · First Year</div>
+    <div class="cert-block">
+      <div class="section-number" style="margin-bottom:1rem;">Certifications</div>
+      <div class="cert-item">
+        <div class="cert-dot-g"></div>
+        <div>
+          <div class="cert-title">Machine Learning using Python</div>
+          <div class="cert-by">SimpliLearn — Supervised &amp; Unsupervised Learning, Model Evaluation, Data Analysis</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-cell reveal reveal-delay-1">
+    <div class="section-number">04 / Contact</div>
+    <h2 class="section-heading" style="margin-top:1rem; font-size:2rem;">Let's <em>connect.</em></h2>
+    <p style="margin-top:1rem; font-size:0.88rem; color:var(--muted); line-height:1.75;">Open to internships, research collaborations, and AI/ML project opportunities.</p>
+    <div class="contact-links" style="margin-top:2rem;">
+      <a href="mailto:khushi.karpe_25uce@sanjivani.edu.in" class="contact-item">
+        <span class="ci-type">Email</span>
+        <span class="ci-label">khushi.karpe_25uce@sanjivani.edu.in</span>
+        <span class="ci-arrow">→</span>
+      </a>
+      <a href="tel:+919325105251" class="contact-item">
+        <span class="ci-type">Phone</span>
+        <span class="ci-label">+91 93251 05251</span>
+        <span class="ci-arrow">→</span>
+      </a>
+      <a href="https://www.linkedin.com/in/khushi-karpe-174b77377" target="_blank" class="contact-item">
+        <span class="ci-type">LinkedIn</span>
+        <span class="ci-label">khushi-karpe-174b77377</span>
+        <span class="ci-arrow">→</span>
+      </a>
+      <a href="https://github.com/Khushi-1910" target="_blank" class="contact-item">
+        <span class="ci-type">GitHub</span>
+        <span class="ci-label">Khushi-1910</span>
+        <span class="ci-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-copy">© 2025 Khushi Navnath Karpe</div>
+  <div class="footer-loc">Kopargaon, Maharashtra, India</div>
+</footer>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+(function animCursor() {
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+})();
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2.5)'; ring.style.borderColor = 'rgba(109,184,138,0.7)'; });
+  el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(109,184,138,0.4)'; });
+});
+
+const canvas = document.getElementById('fieldCanvas');
+const ctx = canvas.getContext('2d');
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize(); window.addEventListener('resize', resize);
+const lines = Array.from({length: 20}, (_, i) => ({
+  x: (i / 19) * 1.3 - 0.15,
+  offset: Math.random() * Math.PI * 2,
+  speed: 0.00025 + Math.random() * 0.0003,
+  opacity: 0.035 + Math.random() * 0.055
+}));
+let t = 0;
+(function drawField() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  t += 1;
+  lines.forEach(l => {
+    ctx.beginPath();
+    ctx.strokeStyle = `rgba(74,124,89,${l.opacity})`;
+    ctx.lineWidth = 1;
+    let first = true;
+    for (let y = 0; y <= canvas.height; y += 4) {
+      const wave = Math.sin(y * 0.005 + t * l.speed * 1000 + l.offset) * 28;
+      const x = l.x * canvas.width + wave;
+      if (first) { ctx.moveTo(x, y); first = false; } else { ctx.lineTo(x, y); }
+    }
+    ctx.stroke();
+  });
+  requestAnimationFrame(drawField);
+})();
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
