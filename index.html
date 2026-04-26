@@ -20,6 +20,7 @@ html { scroll-behavior: smooth; }
   --border: rgba(232,224,204,0.08);
   --border-green: rgba(74,124,89,0.3);
 }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 body {
   background: var(--bg);
   color: var(--cream);
@@ -33,7 +34,7 @@ body {
   background: var(--green-light);
   border-radius: 50%;
   position: fixed; pointer-events: none; z-index: 9999;
-  transition: transform 0.15s ease, width 0.2s, height 0.2s;
+  transition: transform 0.15s ease;
   transform: translate(-50%, -50%);
 }
 .cursor-ring {
@@ -41,9 +42,11 @@ body {
   border: 1px solid rgba(109,184,138,0.4);
   border-radius: 50%;
   position: fixed; pointer-events: none; z-index: 9998;
-  transition: width 0.2s, height 0.2s, border-color 0.2s;
+  transition: border-color 0.2s;
   transform: translate(-50%, -50%);
 }
+
+/* ── NAV ── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
@@ -52,7 +55,7 @@ nav {
 nav::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(to bottom, rgba(12,15,10,0.92) 0%, transparent 100%);
+  background: linear-gradient(to bottom, rgba(12,15,10,0.95) 0%, transparent 100%);
   pointer-events: none; z-index: -1;
 }
 .nav-logo {
@@ -80,7 +83,7 @@ nav::after {
 }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-/* HERO */
+/* ── HERO ── */
 .hero {
   min-height: 100vh;
   display: flex; flex-direction: column; justify-content: flex-end;
@@ -116,12 +119,38 @@ nav::after {
 }
 .hero-name .italic { font-style: italic; color: var(--green-light); }
 .hero-name .outline { -webkit-text-stroke: 1px rgba(232,224,204,0.3); color: transparent; }
+
+/* hero bottom row */
 .hero-bottom {
   display: flex; align-items: flex-end; justify-content: space-between;
   margin-top: 3rem; position: relative; z-index: 1;
   animation: fadeUp 0.8s 0.5s ease both;
 }
 .hero-desc { max-width: 420px; font-size: 0.95rem; line-height: 1.75; color: rgba(232,224,204,0.55); }
+
+/* year badge NEW */
+.hero-year-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--amber);
+  border: 1px solid rgba(200,137,58,0.35);
+  padding: 0.3rem 0.8rem;
+  border-radius: 1px;
+}
+.hero-year-badge::before {
+  content: '';
+  width: 5px; height: 5px;
+  background: var(--amber);
+  border-radius: 50%;
+  animation: pulse 2.5s infinite;
+}
+
 .hero-scroll {
   display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
   font-family: 'IBM Plex Mono', monospace;
@@ -139,7 +168,7 @@ nav::after {
   100%{transform:scaleY(0);transform-origin:bottom}
 }
 
-/* TICKER */
+/* ── TICKER ── */
 .ticker-wrap {
   border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
   background: var(--surface); overflow: hidden; padding: 0.9rem 0; white-space: nowrap;
@@ -154,7 +183,7 @@ nav::after {
 .ticker-item .dot { color: var(--green-light); font-size: 0.5rem; }
 @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
-/* ABOUT */
+/* ── ABOUT ── */
 .about {
   padding: 8rem 5rem;
   display: grid; grid-template-columns: 1fr 2fr; gap: 6rem; align-items: start;
@@ -173,6 +202,32 @@ nav::after {
 .about-content { display: flex; flex-direction: column; gap: 3rem; }
 .about-bio p { font-size: 1.05rem; line-height: 1.9; color: rgba(232,224,204,0.65); margin-bottom: 1.2rem; }
 .about-bio p span { color: var(--cream); font-weight: 400; }
+
+/* stat pills NEW */
+.about-stats {
+  display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem;
+}
+.stat-pill {
+  display: flex; flex-direction: column;
+  border: 1px solid var(--border-green);
+  border-radius: 2px;
+  padding: 0.75rem 1.25rem;
+  background: rgba(74,124,89,0.06);
+  min-width: 100px;
+  transition: background 0.2s;
+}
+.stat-pill:hover { background: rgba(74,124,89,0.12); }
+.stat-pill-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem; font-weight: 300;
+  color: var(--green-light); line-height: 1;
+}
+.stat-pill-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); margin-top: 0.3rem;
+}
+
 .skills-columns {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
   border-top: 1px solid var(--border); padding-top: 2.5rem;
@@ -192,7 +247,7 @@ nav::after {
   background: var(--green); border-radius: 50%; flex-shrink: 0;
 }
 
-/* PROJECT */
+/* ── PROJECT ── */
 .project-section { padding: 8rem 5rem; }
 .project-header {
   display: grid; grid-template-columns: auto 1fr; align-items: end; gap: 2rem; margin-bottom: 5rem;
@@ -201,7 +256,13 @@ nav::after {
 .project-hero-card {
   position: relative; background: var(--surface);
   border: 1px solid var(--border); border-radius: 2px; overflow: hidden;
+  /* glow on hover NEW */
+  transition: box-shadow 0.4s ease;
 }
+.project-hero-card:hover {
+  box-shadow: 0 0 60px rgba(74,124,89,0.08), 0 0 120px rgba(74,124,89,0.04);
+}
+
 .project-banner {
   background: var(--green); padding: 3rem 4rem;
   display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: start;
@@ -215,25 +276,43 @@ nav::after {
   color: rgba(0,0,0,0.12); pointer-events: none;
   letter-spacing: -0.04em; line-height: 1;
 }
+/* shimmer on banner NEW */
+.project-banner::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.04) 50%, transparent 60%);
+  animation: shimmer 4s ease infinite;
+}
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  60%  { transform: translateX(100%); }
+  100% { transform: translateX(100%); }
+}
+
 .project-flag {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
   background: rgba(0,0,0,0.2); color: rgba(232,224,204,0.8);
   padding: 0.3rem 0.8rem; border-radius: 1px; display: inline-block; margin-bottom: 1.2rem;
+  position: relative; z-index: 1;
 }
 .project-title {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 300;
   line-height: 0.95; color: var(--cream); letter-spacing: -0.02em; margin-bottom: 0.75rem;
+  position: relative; z-index: 1;
 }
-.project-sub { font-size: 1rem; color: rgba(232,224,204,0.7); line-height: 1.5; }
-.project-stack { display: flex; flex-direction: column; gap: 0.4rem; align-items: flex-end; }
+.project-sub { font-size: 1rem; color: rgba(232,224,204,0.7); line-height: 1.5; position: relative; z-index: 1; }
+.project-stack { display: flex; flex-direction: column; gap: 0.4rem; align-items: flex-end; position: relative; z-index: 1; }
 .stack-tag {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.6rem; letter-spacing: 0.1em;
   color: rgba(232,224,204,0.6); background: rgba(0,0,0,0.15);
   padding: 0.25rem 0.6rem; border-radius: 1px;
+  transition: color 0.2s, background 0.2s;
 }
+.stack-tag:hover { color: var(--cream); background: rgba(0,0,0,0.3); }
+
 .project-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
 .project-col { padding: 3rem 4rem; border-right: 1px solid var(--border); }
 .project-col:last-child { border-right: none; }
@@ -245,12 +324,15 @@ nav::after {
 }
 .project-col p { font-size: 0.9rem; line-height: 1.85; color: rgba(232,224,204,0.55); margin-bottom: 1.2rem; }
 .project-col p strong { color: var(--cream); font-weight: 400; }
+
 .flow-steps { display: flex; flex-direction: column; }
 .flow-step {
   display: flex; align-items: flex-start; gap: 1.25rem;
   padding: 1rem 0; border-bottom: 1px solid var(--border);
+  transition: padding-left 0.2s;
 }
 .flow-step:last-child { border-bottom: none; }
+.flow-step:hover { padding-left: 0.4rem; }
 .flow-num {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.55rem; letter-spacing: 0.1em; color: var(--green);
@@ -258,20 +340,24 @@ nav::after {
 }
 .flow-text { font-size: 0.85rem; color: rgba(232,224,204,0.6); line-height: 1.5; }
 .flow-text strong { color: var(--cream); font-weight: 400; }
+
 .features-grid {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 1px; background: var(--border);
 }
 .feature-cell {
-  background: var(--surface); padding: 1.5rem 2rem; transition: background 0.2s;
+  background: var(--surface); padding: 1.5rem 2rem;
+  transition: background 0.25s, padding-left 0.2s;
+  cursor: default;
 }
-.feature-cell:hover { background: var(--surface2); }
+.feature-cell:hover { background: var(--surface2); padding-left: 2.5rem; }
 .feat-icon {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.55rem; letter-spacing: 0.12em; color: var(--green); margin-bottom: 0.6rem;
 }
 .feat-name { font-size: 0.9rem; font-weight: 400; color: var(--cream); margin-bottom: 0.3rem; }
 .feat-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.55; }
+
 .sdg-row {
   padding: 2rem 4rem; border-top: 1px solid var(--border);
   display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
@@ -285,10 +371,13 @@ nav::after {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.65rem; letter-spacing: 0.06em;
   padding: 0.4rem 1rem; border: 1px solid; border-radius: 1px;
+  transition: opacity 0.2s;
 }
+.sdg-badge:hover { opacity: 0.75; }
 .sdg-green { border-color: var(--green); color: var(--green-light); }
 .sdg-blue { border-color: rgba(60,130,180,0.4); color: rgba(100,180,220,0.8); }
 .sdg-amber { border-color: rgba(200,137,58,0.4); color: var(--amber); }
+
 .team-row {
   padding: 2rem 4rem; border-top: 1px solid var(--border);
   display: flex; align-items: center; gap: 3rem; background: var(--surface2); flex-wrap: wrap;
@@ -308,7 +397,9 @@ nav::after {
   width: 38px; height: 38px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; font-weight: 500; flex-shrink: 0;
+  transition: transform 0.2s;
 }
+.member:hover .member-av { transform: scale(1.08); }
 .av-lead { background: rgba(74,124,89,0.25); color: var(--green-light); border: 1px solid var(--border-green); }
 .av-partner { background: rgba(232,224,204,0.06); color: rgba(232,224,204,0.5); border: 1px solid var(--border); }
 .member-name-text { font-size: 0.88rem; font-weight: 400; color: var(--cream); line-height: 1; margin-bottom: 0.25rem; }
@@ -320,7 +411,7 @@ nav::after {
   padding: 0.15rem 0.5rem; border-radius: 1px; margin-top: 0.25rem;
 }
 
-/* BOTTOM GRID */
+/* ── BOTTOM GRID ── */
 .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--border); }
 .bottom-cell { padding: 5rem; border-right: 1px solid var(--border); }
 .bottom-cell:last-child { border-right: none; }
@@ -328,12 +419,36 @@ nav::after {
 .edu-degree-text { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; line-height: 1.2; margin-bottom: 0.5rem; }
 .edu-school-text { font-size: 0.9rem; color: rgba(232,224,204,0.5); margin-bottom: 0.25rem; }
 .edu-loc { font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; color: var(--muted); }
+
+/* progress bar NEW */
+.edu-progress { margin-top: 1.5rem; }
+.edu-progress-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem;
+  display: flex; justify-content: space-between;
+}
+.edu-progress-track {
+  height: 2px; background: var(--border); border-radius: 2px; overflow: hidden;
+}
+.edu-progress-fill {
+  height: 100%; background: linear-gradient(to right, var(--green), var(--green-light));
+  border-radius: 2px;
+  animation: fillBar 1.2s 0.5s ease both;
+  transform-origin: left;
+}
+@keyframes fillBar { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+
 .cert-block { margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 2rem; }
-.cert-item { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+.cert-item {
+  display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border);
+  transition: padding-left 0.2s;
+}
+.cert-item:hover { padding-left: 0.4rem; }
 .cert-item:last-child { border-bottom: none; }
 .cert-dot-g { width: 6px; height: 6px; background: var(--green); border-radius: 50%; margin-top: 0.35rem; flex-shrink: 0; }
 .cert-title { font-size: 0.88rem; color: var(--cream); margin-bottom: 0.2rem; }
 .cert-by { font-size: 0.75rem; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
+
 .contact-links { display: flex; flex-direction: column; gap: 0; }
 .contact-item {
   display: flex; align-items: center; gap: 1.5rem;
@@ -355,12 +470,14 @@ footer {
 .footer-copy { font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--muted); }
 .footer-loc { font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; letter-spacing: 0.1em; color: var(--muted); }
 
+/* ── ANIMATIONS ── */
 @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:none} }
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.75s ease, transform 0.75s ease; }
 .reveal.visible { opacity: 1; transform: none; }
 .reveal-delay-1 { transition-delay: 0.1s; }
 .reveal-delay-2 { transition-delay: 0.2s; }
 
+/* ── RESPONSIVE ── */
 @media (max-width: 900px) {
   nav { padding: 1.2rem 2rem; }
   .nav-links, .nav-status { display: none; }
@@ -401,6 +518,7 @@ footer {
   </div>
 </nav>
 
+<!-- HERO -->
 <section class="hero" id="home">
   <canvas class="field-canvas" id="fieldCanvas"></canvas>
   <div class="hero-bg-text">KHUSHI</div>
@@ -413,7 +531,10 @@ footer {
     <span class="italic">Karpe</span>
   </h1>
   <div class="hero-bottom">
-    <p class="hero-desc">First-year CSE student at Sanjivani University building AI systems at the intersection of computer vision, deep learning, and real-world robotics. Project lead, FarmRover.</p>
+    <div>
+      <p class="hero-desc">Second-year CSE student at Sanjivani University building AI systems at the intersection of computer vision, deep learning, and real-world robotics. Project lead, FarmRover.</p>
+      <div class="hero-year-badge">2nd Year · B.Tech CSE · 2025–26</div>
+    </div>
     <div class="hero-scroll">
       <div class="hero-scroll-line"></div>
       <span>Scroll</span>
@@ -421,8 +542,9 @@ footer {
   </div>
 </section>
 
+<!-- TICKER -->
 <div class="ticker-wrap">
-  <div class="ticker-inner" id="tickerInner">
+  <div class="ticker-inner">
     <span class="ticker-item"><span class="dot">◆</span> Python</span>
     <span class="ticker-item"><span class="dot">◆</span> TensorFlow</span>
     <span class="ticker-item"><span class="dot">◆</span> OpenCV</span>
@@ -454,6 +576,7 @@ footer {
   </div>
 </div>
 
+<!-- ABOUT -->
 <section class="about" id="about">
   <div class="about-label reveal">
     <div class="section-number">01 / About</div>
@@ -461,9 +584,27 @@ footer {
   </div>
   <div class="about-content">
     <div class="about-bio reveal reveal-delay-1">
-      <p>I'm <span>Khushi Karpe</span>, a first-year B.Tech Computer Science student from Kopargaon, Maharashtra. My work sits at the intersection of <span>AI, computer vision, and real-world engineering</span> — building systems that don't just run in notebooks but actually solve tangible problems.</p>
+      <p>I'm <span>Khushi Karpe</span>, a second-year B.Tech Computer Science student from Kopargaon, Maharashtra. My work sits at the intersection of <span>AI, computer vision, and real-world engineering</span> — building systems that don't just run in notebooks but actually solve tangible problems.</p>
       <p>As <span>project lead of FarmRover</span>, I coordinated a cross-disciplinary team to ship an autonomous agricultural robot integrating IoT sensors, a trained disease-detection model, and a live GPS dashboard. I'm driven by the conviction that <span>AI-driven solutions should reach the people who need them most.</span></p>
       <p>I'm actively seeking internship opportunities to deepen my expertise in machine learning, embedded AI, and production systems.</p>
+      <div class="about-stats">
+        <div class="stat-pill">
+          <span class="stat-pill-val">2nd</span>
+          <span class="stat-pill-label">Year CSE</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-pill-val">3+</span>
+          <span class="stat-pill-label">AI Projects</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-pill-val">1</span>
+          <span class="stat-pill-label">Certification</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-pill-val">3</span>
+          <span class="stat-pill-label">SDGs Aligned</span>
+        </div>
+      </div>
     </div>
     <div class="skills-columns reveal reveal-delay-2">
       <div>
@@ -488,6 +629,7 @@ footer {
   </div>
 </section>
 
+<!-- PROJECT -->
 <section class="project-section" id="project">
   <div class="project-header">
     <div>
@@ -585,7 +727,7 @@ footer {
           <div class="member-av av-lead">KK</div>
           <div>
             <div class="member-name-text">Khushi Karpe</div>
-            <div class="member-role-text">CSE · 1st Year</div>
+            <div class="member-role-text">CSE · 2nd Year</div>
             <div class="lead-chip">Project Lead</div>
           </div>
         </a>
@@ -610,13 +752,25 @@ footer {
   </div>
 </section>
 
+<!-- EDUCATION + CONTACT -->
 <div class="bottom-grid" id="contact">
   <div class="bottom-cell reveal">
     <div class="section-number">03 / Education</div>
-    <div class="edu-year" style="margin-top:1rem;">2024 — Present</div>
+    <div class="edu-year" style="margin-top:1rem;">2025 — Present</div>
     <div class="edu-degree-text">B.Tech — Computer Science &amp; Engineering</div>
     <div class="edu-school-text">Sanjivani University</div>
-    <div class="edu-loc">Kopargaon, Maharashtra, India · First Year</div>
+    <div class="edu-loc">Kopargaon, Maharashtra, India</div>
+
+    <div class="edu-progress" style="margin-top:1.5rem;">
+      <div class="edu-progress-label">
+        <span>Degree Progress</span>
+        <span>2nd Year / 4 Years</span>
+      </div>
+      <div class="edu-progress-track">
+        <div class="edu-progress-fill" style="width:50%;"></div>
+      </div>
+    </div>
+
     <div class="cert-block">
       <div class="section-number" style="margin-bottom:1rem;">Certifications</div>
       <div class="cert-item">
@@ -628,6 +782,7 @@ footer {
       </div>
     </div>
   </div>
+
   <div class="bottom-cell reveal reveal-delay-1">
     <div class="section-number">04 / Contact</div>
     <h2 class="section-heading" style="margin-top:1rem; font-size:2rem;">Let's <em>connect.</em></h2>
@@ -663,6 +818,7 @@ footer {
 </footer>
 
 <script>
+/* CURSOR */
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursorRing');
 let mx = 0, my = 0, rx = 0, ry = 0;
@@ -674,10 +830,17 @@ document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; })
   requestAnimationFrame(animCursor);
 })();
 document.querySelectorAll('a, button').forEach(el => {
-  el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2.5)'; ring.style.borderColor = 'rgba(109,184,138,0.7)'; });
-  el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(109,184,138,0.4)'; });
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+    ring.style.borderColor = 'rgba(109,184,138,0.7)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.borderColor = 'rgba(109,184,138,0.4)';
+  });
 });
 
+/* FIELD CANVAS */
 const canvas = document.getElementById('fieldCanvas');
 const ctx = canvas.getContext('2d');
 function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
@@ -707,8 +870,11 @@ let t = 0;
   requestAnimationFrame(drawField);
 })();
 
+/* SCROLL REVEAL */
 const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
